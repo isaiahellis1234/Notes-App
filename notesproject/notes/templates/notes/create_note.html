@@ -1,0 +1,65 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Create Note</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+  </head>
+  <body class="bg-gray-100 flex items-center justify-center min-h-screen">
+    <div class="bg-white p-8 rounded-lg shadow-md w-full max-w-md">
+      <h1 class="text-2xl font-bold text-center text-gray-800 mb-6">
+        Create a Note
+      </h1>
+
+      <form method="post" class="space-y-4">
+        {% csrf_token %}
+
+        <label class="block text-gray-700">Send to:</label>
+        <select
+          name="recipient"
+          class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+        >
+          <option value="">Send to Myself</option>
+          {% for user in users %}
+          <option value="{{ user.id }}">{{ user.username }}</option>
+          {% endfor %}
+        </select>
+
+        <label class="block text-gray-700">Title:</label>
+        <input
+          type="text"
+          name="title"
+          placeholder="Title"
+          required
+          class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400"
+        />
+
+        <label class="block text-gray-700">Content:</label>
+        <textarea
+          name="content"
+          placeholder="Write your note..."
+          required
+          class="w-full px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-400 h-32 resize-none"
+        ></textarea>
+
+        <button
+          type="submit"
+          class="w-full bg-blue-500 text-white py-2 rounded-lg shadow-md hover:bg-blue-600 transition"
+        >
+          💾 Save Note
+        </button>
+      </form>
+
+      {% if error %}
+      <p class="text-red-500 text-center mt-4">{{ error }}</p>
+      {% endif %}
+
+      <div class="text-center mt-4">
+        <a href="{% url 'frontpage' %}" class="text-blue-500 hover:underline"
+          >🔙 Back to Notes</a
+        >
+      </div>
+    </div>
+  </body>
+</html>

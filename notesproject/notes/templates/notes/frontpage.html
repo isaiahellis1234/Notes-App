@@ -1,0 +1,115 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Notes Dashboard</title>
+    <style>
+      body {
+        font-family: Arial, sans-serif;
+        margin: 20px;
+        padding: 0;
+        background-color: #f4f4f4;
+      }
+      h1,
+      h2 {
+        text-align: center;
+      }
+      .container {
+        max-width: 800px;
+        margin: auto;
+        background: white;
+        padding: 20px;
+        border-radius: 8px;
+        box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+      }
+      .notes-section {
+        margin-bottom: 20px;
+      }
+      .note {
+        background: #fff;
+        padding: 10px;
+        border-radius: 5px;
+        box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+        margin-bottom: 10px;
+      }
+      .note p {
+        margin: 5px 0;
+      }
+      .note strong {
+        color: #007bff;
+      }
+      .btn {
+        display: block;
+        width: fit-content;
+        padding: 10px 15px;
+        color: white;
+        background-color: #007bff;
+        text-decoration: none;
+        border-radius: 5px;
+        text-align: center;
+        margin: 10px auto;
+      }
+      .btn:hover {
+        background-color: #0056b3;
+      }
+      .logout {
+        float: right;
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container">
+      <h1>Welcome, {{ request.user.username }}!</h1>
+      <a href="{% url 'logout' %}" class="btn logout">Logout</a>
+      <hr />
+
+      <!-- 📥 Received Notes -->
+      <h2>📥 Received Notes</h2>
+      <div class="notes-section">
+        {% for note in received_notes %}
+        <div class="note">
+          <p><strong>From:</strong> {{ note.sender.username }}</p>
+          <p><strong>Title:</strong> {{ note.title }}</p>
+          <p>{{ note.content }}</p>
+          <p><small>Sent on: {{ note.created_at }}</small></p>
+        </div>
+        {% empty %}
+        <p>No received notes yet.</p>
+        {% endfor %}
+      </div>
+
+      <!-- 📤 Sent Notes -->
+      <h2>📤 Sent Notes</h2>
+      <div class="notes-section">
+        {% for note in sent_notes %}
+        <div class="note">
+          <p><strong>To:</strong> {{ note.recipient.username }}</p>
+          <p><strong>Title:</strong> {{ note.title }}</p>
+          <p>{{ note.content }}</p>
+          <p><small>Sent on: {{ note.created_at }}</small></p>
+        </div>
+        {% empty %}
+        <p>No sent notes yet.</p>
+        {% endfor %}
+      </div>
+
+      <!-- 📝 Notes to Myself -->
+      <h2>📝 Notes to Myself</h2>
+      <div class="notes-section">
+        {% for note in notes_to_self %}
+        <div class="note">
+          <p><strong>Title:</strong> {{ note.title }}</p>
+          <p>{{ note.content }}</p>
+          <p><small>Created on: {{ note.created_at }}</small></p>
+        </div>
+        {% empty %}
+        <p>No personal notes yet.</p>
+        {% endfor %}
+      </div>
+
+      <!-- Create a Note -->
+      <a href="{% url 'create_note' %}" class="btn">✍️ Write a Note</a>
+    </div>
+  </body>
+</html>
